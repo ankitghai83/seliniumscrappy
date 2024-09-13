@@ -14,18 +14,32 @@ chromedriver_path="C:\\Users\\Ankit Ghai\\Documents\\PycharmProjects\\pythonProj
 service  = Service(executable_path=chromedriver_path)
 
 
-def create_webdriver():
-    driver=webdriver.Chrome(service=service, options=driver_option)
-    driver.get("https://github.com/collections/machine-learning")
-    #WebDriverWait.until(5)
-    projects=driver.find_elements("//h1[@class='h3 lh-condensed']")
+try:
+    def create_webdriver():
+        driver=webdriver.Chrome(service=service, options=driver_option)
+        driver.get("https://github.com/collections/machine-learning")
 
-    project_list={}
-    for proj in projects:
-        proj_name=proj.text
-        proj_url=driver.find_elements("a")[0].get_attribute('href')
-        project_list[proj_name]=proj_url
-    return project_list
+        #WebDriverWait.until(5)
+        projects=driver.find_elements("xpath","//h1[@class='h3 lh-condensed']")
+        #links=driver.find_elements(By.XPATH, "/html/body/div[1]/div[5]/main/div[2]/div/div/article[1]/div[1]/h1")
+        #print(projects)
+        #return projects
+    
+        project_list={}
+        for proj in projects:
+            proj_name=proj.text
+            #proj_url=proj.find_elements("xpath","/html/body/div[1]/div[5]/main/div[2]/div/div/article[4]/div[1]/h1/a").append
+            proj_url=proj.find_elements(By.CLASS_NAME,'[h3 lh-condensed]')
+            print(proj_url)
+            #links=[elem.get_attribute('href') for elem in proj_url]
+            project_list[proj_name]=proj_url
+            project_df=pd.DataFrame.from_dict(project_list,orient='index')
+            #print(project_df)
+            project_df.to_csv('project_list.csv')
+            #browser.quit()
+    
+except Exception as es:
+    print("The error is: ",es)
 
  
 
