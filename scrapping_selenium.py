@@ -36,6 +36,9 @@ try:
             #links=[elem.get_attribute('href') for elem in proj_url]
             project_list[proj_name]=proj_url
             project_df=pd.DataFrame.from_dict(project_list,orient='index')
+            project_df['proj_name']=project_df.index
+            project_df.columns=['proj_url','proj_name']
+            project_df=project_df.reset_index(drop=True)
             #print(project_df)
             project_df.to_csv('project_list.csv')
             #browser.quit()
